@@ -5,7 +5,7 @@ mean=1
 '''
 This class simply generates a bandit problem with number of bandit arms
 being `num_bandits`, which itself is chosen randomly. The numbers being sampled
-from the gaussian are the reward associated with those arms.
+from the gaussian are the rewards associated with those arms.
 
 For simplicity, I have restricted ourselved to nonnegative rewards and decimals upto 2 digits
 to avoid any floating point calculation errors.
@@ -29,12 +29,12 @@ print("True mean rewards",bandit_problem)
 
 '''
 This is technically cheating, you should not be aware of the true underlying 
-reward through any means. It doesn't matter while learning this but keep it in mind
+reward through any means. It doesn't matter as beginners but keep it in mind
 that this data is unavailable to you (no need for learning if we knew already!).
 '''
 
 '''
-Now for each arm, when we pull it, we get modulus of nunber sampled
+Now for each arm, when we pull it, we get modulus of number sampled
 from a gaussian with mean defined in `bandit_problem` array and standard
 deviation=std.
 
@@ -50,21 +50,21 @@ def bandit_simulator(arm_index):
 So, now we have an environment that generates a bandit problem
 with a random number of arms and random mean rewards. We have a function to 
 sample reward on "pulling" each of these arms. Now, try out algorithms that 
-can come close to mean rewards.
+can come close to true mean rewards.
 
 Any rule based method won't work, since means change everytime you run the python file.
 So, your algorithm must truly be able to learn as good as it can in a single run of this file.
 
 As you must have understood by now, learning is an iterative procedure. Typically, to represent limited
 computational and time resources, upper limits on allowed learning iterations are imposed. So, I am setting 
-a variable that defines number of allowed iterations. Of course, while building, you play around with it.
+a variable that defines number of allowed iterations. Of course, while building, you can play around with it.
 '''
 
 num_allowed_iterations=2000
 
 '''
 Except for the values of mean, std, num_iterations, I don't think you should
-have the need to change any of code written to this point.
+have the need to change any of the code written to this point.
 '''
 
 estimated_means=np.zeros(shape=num_bandits, dtype=float)
