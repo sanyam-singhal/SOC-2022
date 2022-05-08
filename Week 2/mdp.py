@@ -1,66 +1,63 @@
 import numpy as np
-import mdp_env
-
-'''Still ongoing, do not try it yet'''
 
 
-'''You access the underlying environment through the following class'''
-class Environment:
-    
-    '''
-    The init creates a copy of the underlying MDP as an object.
-    To keep this file concise, I have put the underlying in a different file 'mdp_env.py'.
-    '''
+'''
+The MDP has 6 states: 0,1,2,3,4,5. The state 5 is the terminal state and the system can start in any state among 0 to 4.
 
+Possible actions and their resultant landing state and rewards are given in the arrays defined in the class.
+
+For each current_state_action tuple allowed, the corresponding next state and reward is given by the element having the same
+index as the tuple in its array.
+
+To access the environment, we create an object of it.
+
+To simulate, you pass a state-action tuple (s,a) to the sample_reward() function, which updates the current state and returns a reward.
+
+For simplicity of handling, actions have been set as integers as well. Actions are 0,1,2 (sorry for possible confusion 
+with state indices but this ensures easier implementation). Allowed actions from each state are given in the current_state_action tuple array.
+In each tuple in that array, the first element corresponds to current state and the second 
+element corresponds to the action.
+'''
+
+class Environment():
     def __init__(self):
-        self.env=mdp_env.make()
+        self.start_state=np.random.randint(low=0,high=4,dtype=int,size=1)[0]
+        self.terminal_state=5
+        self.state=self.start_state
+        self.done=False
+        self.current_state_action=np.array([(0,2),(0,1),(1,0),(1,1),(2,0),(2,1),(3,0),(3,1),(4,0)])
+        self.next_state=np.array([5,1,0,2,1,3,2,4,3])
+        self.rewards=np.array([-2,-1,+1,-1,+1,-1,+1,-1,+1])
 
-    def close_env(self):
-        self.env.close()
+    def close(self):
+        self.state=self.terminal_state
 
-    def access_env(self, action):
-        '''if you do not provide an action,
-        the code chooses an action, uniformly at random'''
-        if action==None:
-            action=np.random.choice(self.env.actions)
-        
-        self.state, self.reward, self.done=self.env.step(action)
-        '''
-        Observations are position and velocity, which are continuous variables
-        for now let us work with discretized version, and see how we can perform
-        we may work with continous data later
-        '''
-        return self.state, self.reward, self.done
-    
-'''Your method to choose the best action'''
-'''Essentially, your RL algorithm is the strategy to choose'''
+    def sample_reward(self, current_state_action_tuple):
+        action_tuple_index=np.where(self.current_state_action==current_state_action_tuple)
+        self.state=self.next_state(action_tuple_index)
+        reward=self.rewards[action_tuple_index]
+        return reward
 
-def strategy(state, reward, done):
-    next_action=None
-    '''
-    YOUR CODE COMES HERE
-    FEEL FREE TO DECLARE ANY VARIABLES, LOCAL OT GLOBAL
-    AVOID DECLARING ANY OTHER PARAMETER IN THE FUNCTION
-    IDEALLY, YOUR ACTION SHOULD ONLY DEPEND ON THE CURRENT STATE,
-    REWARD OBTAINED AFTER COMING TO THIS STATE, WHETHER OR NOT THE EPISODE 
-    HAS ENDED (IGNORE THE INFO PART FOR NOW)
-    '''
-    return next_action
+'''
+Your objective is to learn the optimal policy and the associated optimal value function.
 
-problem=Environment()
+Note that the state number 5 has been set as the terminal state so it
+should have the value 0. 
 
-'''Play around with number of iterations to generate episodes
-of different lengths. At times, they would be shorter than 1000 because the 
-agent reaches the terminal state before 1000th iteration'''
+For states 1,2,3, there are two possible actions (0,1). For state 4, there is only possible action (0).
 
-'''In this problem, the terminal state is the mountain top'''
-number_iterations=1000
+For state 0, there are two actions (1,2), but the behaviour is different from states 1,2,3.
+'''
 
-for i in range(0,number_iterations):
-    next_action=strategy()
-    next_state, obtained_reward, done= problem.access_env()
+env_obj=Environment()
 
-    '''
-    It would be useful to print states and rewards to see how
-    the problem is evolving.
-    '''
+'''
+What are valid operation that you can do?
+1. Accessing the current state using state attribute of the environment object.
+2. View the current_state_action array and chose which action to take.
+3. To reach the next state, call the function sample_reward of the Environment class. It sets 
+the next state in the state attribute of the object and returns a numerical reward.
+
+'''
+
+#-------Your code starts here---------------
