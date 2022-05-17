@@ -40,12 +40,13 @@ class Environment():
                 action_tuple_index=i
 
         if action_tuple_index==-1:
-            print("Incorrect state-action pair")
-            pass
-
-        self.state=self.next_state[action_tuple_index]
-        reward=self.rewards[action_tuple_index]
-        return reward
+            print("No change in state")
+            return 0
+            
+        else:
+            self.state=self.next_state[action_tuple_index]
+            reward=self.rewards[action_tuple_index]
+            return reward
 
 '''
 Your objective is to learn the optimal policy and the associated optimal value function.
