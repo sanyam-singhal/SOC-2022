@@ -33,8 +33,17 @@ class Environment():
         self.state=self.terminal_state
 
     def sample_reward(self, current_state_action_tuple):
-        action_tuple_index=np.where(self.current_state_action==current_state_action_tuple)
-        self.state=self.next_state(action_tuple_index)
+        action_tuple_index=-1
+        for i in range(self.current_state_action.shape[0]):
+            check= (self.current_state_action[i]==np.array(current_state_action_tuple))
+            if check.sum()==2:
+                action_tuple_index=i
+
+        if action_tuple_index==-1:
+            print("Incorrect state-action pair")
+            pass
+
+        self.state=self.next_state[action_tuple_index]
         reward=self.rewards[action_tuple_index]
         return reward
 
